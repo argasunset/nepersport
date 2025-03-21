@@ -1,0 +1,47 @@
+Jam Operasional: Array
+(
+    [0] => 17:00 - 18:00
+    [1] => 18:00 - 19:00
+    [2] => 19:00 - 20:00
+    [3] => 20:00 - 21:00
+    [4] => 21:00 - 22:00
+)
+
+Jadwal Terbooking: Array
+(
+)
+
+Data Jadwal Response: Array
+(
+    [0] => Array
+        (
+            [jam] => 17:00 - 18:00
+            [status] => kosong
+        )
+
+    [1] => Array
+        (
+            [jam] => 18:00 - 19:00
+            [status] => kosong
+        )
+
+    [2] => Array
+        (
+            [jam] => 19:00 - 20:00
+            [status] => kosong
+        )
+
+    [3] => Array
+        (
+            [jam] => 20:00 - 21:00
+            [status] => kosong
+        )
+
+    [4] => Array
+        (
+            [jam] => 21:00 - 22:00
+            [status] => kosong
+        )
+
+)
+
