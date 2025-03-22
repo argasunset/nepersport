@@ -814,17 +814,18 @@ $query->close();
                 harga
               }) => {
                 let isBooked = jamTerbooking.some(bookedJam => normalizeTime(bookedJam) === normalizeTime(jam));
+                let isPast = isPastTime(jam, tanggal);
                 let adjustedJam = applyBonusTime(jam);
 
                 let div = document.createElement("div");
                 div.classList.add("p-2");
 
                 div.innerHTML = `
-          <label style="${isBooked ? 'color: red; text-decoration: line-through; font-weight: bold;' : ''}">
-              <input type="radio" name="jam" value="${adjustedJam}" data-harga="${harga}" ${isBooked ? 'disabled' : ''}>
-              ${adjustedJam} (${harga.toLocaleString("id-ID").replace(/,/g, ".")})
-          </label>
-      `;
+      <label style="${(isBooked || isPast) ? 'color: red; text-decoration: line-through; font-weight: bold;' : ''}">
+          <input type="radio" name="jam" value="${adjustedJam}" data-harga="${harga}" ${(isBooked || isPast) ? 'disabled' : ''}>
+          ${adjustedJam}
+      </label>
+  `;
                 jamContainer.appendChild(div);
               });
 
@@ -926,11 +927,20 @@ $query->close();
               endHour += 1;
               if (endHour === 24) endHour = "00";
               let newEnd = `${String(endHour).padStart(2, "0")}:${String(endMinute).padStart(2, "0")}`;
-              return `${start}-${newEnd} (Bonus 1 jam)`;
+              return `${start}-${newEnd}`;
             }
 
             function normalizeTime(jam) {
               return jam.trim().replace(/\s+/g, "");
+            }
+
+            function isPastTime(jam, tanggalYangDipilih) {
+              const [startTime] = jam.split("-")[0].split(":");
+              const now = new Date();
+              if (tanggalYangDipilih.toDateString() === now.toDateString()) {
+                return parseInt(startTime) <= now.getHours();
+              }
+              return false;
             }
 
             // ✅ Script No Rek Otomatis:
@@ -958,7 +968,6 @@ $query->close();
             });
           });
         </script>
-
       </div>
 
       <!-- Modal Jadwal -->

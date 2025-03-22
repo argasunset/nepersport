@@ -269,16 +269,6 @@ if ($result->num_rows > 0) {
                   <li>
                     <div class="dropdown-divider"></div>
                   </li>
-                  <li><a class="dropdown-item" href="#">My Profile</a></li>
-                  <li><a class="dropdown-item" href="#">My Balance</a></li>
-                  <li><a class="dropdown-item" href="#">Inbox</a></li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                  </li>
-                  <li><a class="dropdown-item" href="#">Account Setting</a></li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                  </li>
                   <li><a class="dropdown-item" href="login.php">Logout</a></li>
                 </ul>
               </li>
@@ -610,9 +600,6 @@ if ($result->num_rows > 0) {
 
   <!-- Datatables -->
   <script src="assets/js/plugin/datatables/datatables.min.js"></script>
-
-  <!-- Bootstrap Notify -->
-  <script src="assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
 
   <!-- jQuery Vector Maps -->
   <script src="assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>

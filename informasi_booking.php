@@ -281,17 +281,7 @@ if (!$result_booking) {
                         <a href="profile.php" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
                       </div>
                     </div>
-                  </li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                  </li>
-                  <li><a class="dropdown-item" href="#">My Profile</a></li>
-                  <li><a class="dropdown-item" href="#">My Balance</a></li>
-                  <li><a class="dropdown-item" href="#">Inbox</a></li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                  </li>
-                  <li><a class="dropdown-item" href="#">Account Setting</a></li>
+                  </li>                
                   <li>
                     <div class="dropdown-divider"></div>
                   </li>
@@ -308,9 +298,6 @@ if (!$result_booking) {
           <h2 style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase;">
             INFORMASI BOOKING
           </h2>
-
-          <input type="text" id="search" class="form-control mb-3" placeholder="Cari nama user atau tanggal...">
-
           <div style="width: 100%; overflow-x: auto;">
             <div id="loading" style="text-align: center; display: none;">
               <img src="assets/loading.gif" width="50">
@@ -459,9 +446,6 @@ if (!$result_booking) {
 
   <!-- Datatables -->
   <script src="assets/js/plugin/datatables/datatables.min.js"></script>
-
-  <!-- Bootstrap Notify -->
-  <script src="assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
 
   <!-- jQuery Vector Maps -->
   <script src="assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>

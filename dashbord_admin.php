@@ -262,16 +262,6 @@ if ($result->num_rows > 0) {
         <!-- Navbar Header -->
         <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
           <div class="container-fluid">
-            <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <button type="submit" class="btn btn-search pe-1">
-                    <i class="fa fa-search search-icon"></i>
-                  </button>
-                </div>
-                <input type="text" placeholder="Search ..." class="form-control" />
-              </div>
-            </nav>
 
             <ul class="navbar-nav ms-auto align-items-center">
               <li class="nav-item topbar-user dropdown hidden-caret">
@@ -297,22 +287,11 @@ if ($result->num_rows > 0) {
                       </div>
                     </div>
                   </li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                  </li>
-                  <li><a class="dropdown-item" href="#">My Profile</a></li>
-                  <li><a class="dropdown-item" href="#">My Balance</a></li>
-                  <li><a class="dropdown-item" href="#">Inbox</a></li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                  </li>
-                  <li><a class="dropdown-item" href="#">Account Setting</a></li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                  </li>
-                  <li><a class="dropdown-item" href="login.php">Logout</a></li>
-                </ul>
+                  <div class="dropdown-divider"></div>
               </li>
+              <li><a class="dropdown-item" href="login.php">Logout</a></li>
+            </ul>
+            </li>
             </ul>
             </li>
             </ul>
@@ -326,7 +305,7 @@ if ($result->num_rows > 0) {
           <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
             <div>
               <h3 class="fw-bold mb-3">Dashboard</h3>
-             
+
             </div>
           </div>
           <div class="row">
@@ -411,7 +390,147 @@ if ($result->num_rows > 0) {
               </div>
             </div>
           </div>
+          <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+          <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+          <style>
+            body {
+              background-color: #f4f6f9;
+              font-family: Arial, sans-serif;
+            }
 
+            #calendar {
+              max-width: 1100px;
+              margin: 50px auto;
+              padding: 20px;
+              background: #fff;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+              border-radius: 12px;
+            }
+
+            .fc-toolbar-title {
+              font-size: 1.7rem;
+              color: #333;
+            }
+
+            /* Modal styling */
+            #modal {
+              display: none;
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(0, 0, 0, 0.4);
+              justify-content: center;
+              align-items: center;
+              z-index: 999;
+            }
+
+            #modal form {
+              background: #fff;
+              padding: 20px;
+              border-radius: 12px;
+              width: 300px;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+              animation: fadeIn 0.3s ease-in-out;
+            }
+
+            @keyframes fadeIn {
+              from {
+                opacity: 0;
+                transform: scale(0.9);
+              }
+
+              to {
+                opacity: 1;
+                transform: scale(1);
+              }
+            }
+
+            textarea {
+              width: 100%;
+              height: 80px;
+              padding: 8px;
+              border-radius: 6px;
+              border: 1px solid #ccc;
+              resize: none;
+            }
+
+            button {
+              margin-top: 10px;
+              margin-right: 5px;
+              padding: 8px 12px;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+            }
+
+            button[type="submit"] {
+              background-color: #3b82f6;
+              color: #fff;
+            }
+
+            button[type="button"] {
+              background-color: #ccc;
+            }
+          </style>
+          </head>
+
+          <body>
+            <div id="calendar"></div>
+
+            <!-- Modal input jadwal -->
+            <div id="modal">
+              <form id="jadwalForm">
+                <h3>Tambah Jadwal</h3>
+                <input type="hidden" id="tanggalInput" name="tanggal">
+                <textarea id="keteranganInput" name="keterangan" placeholder="Isi jadwal..." required></textarea>
+                <br>
+                <button type="submit">Simpan</button>
+                <button type="button" onclick="tutupModal()">Batal</button>
+              </form>
+            </div>
+
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendar');
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                  initialView: 'dayGridMonth',
+                  dateClick: function(info) {
+                    document.getElementById('tanggalInput').value = info.dateStr;
+                    document.getElementById('modal').style.display = 'flex';
+                  },
+                  events: 'fetch_jadwal.php',
+                  eventColor: '#3b82f6',
+                  eventTextColor: '#fff',
+                  selectable: true,
+                  displayEventTime: false
+                });
+
+                calendar.render();
+
+                document.getElementById('jadwalForm').addEventListener('submit', function(e) {
+                  e.preventDefault();
+                  var formData = new FormData(this);
+                  fetch('simpan_jadwal.php', {
+                      method: 'POST',
+                      body: formData
+                    })
+                    .then(response => response.text())
+                    .then(result => {
+                      alert('Jadwal berhasil disimpan!');
+                      calendar.refetchEvents();
+                      tutupModal();
+                    });
+                });
+              });
+
+              function tutupModal() {
+                document.getElementById('modal').style.display = 'none';
+                document.getElementById('keteranganInput').value = '';
+              }
+            </script>
         </div>
         <!--   Core JS Files   -->
         <script src="assets/js/core/jquery-3.7.1.min.js"></script>
@@ -432,9 +551,6 @@ if ($result->num_rows > 0) {
 
         <!-- Datatables -->
         <script src="assets/js/plugin/datatables/datatables.min.js"></script>
-
-        <!-- Bootstrap Notify -->
-        <script src="assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
 
         <!-- jQuery Vector Maps -->
         <script src="assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
