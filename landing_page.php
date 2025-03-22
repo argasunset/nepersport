@@ -695,7 +695,7 @@ $query->close();
             <div class="tab-content" data-aos="fade-up" data-aos-delay="200">
 
               <div class="tab-pane fade active show" id="features-tab-1">
-                <img src="assets/img/tabs-1.jpg" alt="" class="img-fluid">
+                <img src="assets/img/zagordam.jpeg" alt="" class="img-fluid">
               </div><!-- End Tab Content Item -->
 
               <div class="tab-pane fade" id="features-tab-2">
@@ -1073,7 +1073,7 @@ $query->close();
           </div>
 
           <div class="features-image col-lg-5 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="200">
-            <img src="assets/img/features-3.jpg" alt="">
+            <img src="assets/img/r.jpeg" alt="">
           </div>
 
         </div>
