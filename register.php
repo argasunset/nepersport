@@ -58,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -76,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-size: cover;
             background-position: center;
         }
+
         .register-container {
             background-color: rgba(255, 255, 255, 0.9);
             padding: 20px;
@@ -84,11 +86,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             max-width: 400px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         .register-container h2 {
             text-align: center;
             margin-bottom: 20px;
             color: #333;
         }
+
         .register-container input[type="text"],
         .register-container input[type="password"],
         .register-container input[type="email"] {
@@ -99,10 +103,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 5px;
             font-size: 16px;
         }
+
         .register-container button {
             width: 100%;
             padding: 10px;
-            background-color:rgb(0, 0, 0);
+            background-color: rgb(0, 0, 0);
             color: white;
             border: none;
             border-radius: 5px;
@@ -110,28 +115,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         .register-container button:hover {
-            background-color:rgb(0, 0, 0);
+            background-color: rgb(0, 0, 0);
         }
+
         .register-container p {
             text-align: center;
             margin-top: 15px;
             font-size: 14px;
         }
+
         .register-container a {
             color: #007bff;
             text-decoration: none;
         }
+
         .register-container a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
     <div class="register-container">
         <h2>Register</h2>
         <form method="POST">
-            <input type="text" name="nama" placeholder="Nama Lengkap" required>
+            <input type="text" name="nama" placeholder="Username" required>
             <input type="text" name="no_hp" placeholder="Nomor HP" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="text" name="alamat" placeholder="Alamat" required>
@@ -141,4 +151,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
     </div>
 </body>
+
 </html>

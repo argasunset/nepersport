@@ -305,11 +305,11 @@ if (!$result_booking) {
 
       <div class="container">
         <div class="page-inner">
-          <!-- Judul -->
-          <h2
-            style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase;">
+          <h2 style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase;">
             INFORMASI BOOKING
           </h2>
+
+          <input type="text" id="search" class="form-control mb-3" placeholder="Cari nama user atau tanggal...">
 
           <div style="width: 100%; overflow-x: auto;">
             <div id="loading" style="text-align: center; display: none;">
@@ -327,7 +327,7 @@ if (!$result_booking) {
                 </tr>
               </thead>
               <tbody id="data-booking">
-                <!-- Data booking akan dimuat di sini melalui AJAX -->
+                <!-- Data booking dimuat dengan AJAX -->
               </tbody>
             </table>
           </div>
@@ -335,89 +335,80 @@ if (!$result_booking) {
       </div>
 
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-      <script>
-        $(document).ready(function() {
-          // Fungsi untuk memuat data booking
-          function loadData(query = '') {
-            $.ajax({
-              url: "fetch_booking.php",
-              method: "POST",
-              data: {
-                query: query
-              },
-              success: function(data) {
-                $("#data-booking").html(data);
-              }
-            });
-          }
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  $(document).ready(function() {
+    function loadData(query = '') {
+      $("#loading").show();
+      $.ajax({
+        url: "fetch_booking.php",
+        method: "POST",
+        data: { query: query },
+        success: function(data) {
+          $("#loading").hide();
+          $("#data-booking").html(data);
+        }
+      });
+    }
 
-          // Load data saat halaman dibuka
-          loadData();
+    loadData(); // load pertama kali
 
-          // Pencarian real-time
-          $("#search").keyup(function() {
-            var searchText = $(this).val();
-            loadData(searchText);
-          });
+    $("#search").on("keyup", function() {
+      const searchText = $(this).val();
+      loadData(searchText);
+    });
 
-          // Fungsi untuk aksi accept / reject
-          function konfirmasiAction(action, id) {
-            Swal.fire({
-              title: action === 'accept' ? "Terima Booking?" : "Tolak Booking?",
-              text: action === 'accept' ? "Booking ini akan diterima." : "Booking ini akan ditolak dan dihapus.",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonColor: action === 'accept' ? "#28a745" : "#d33",
-              cancelButtonColor: "#6c757d",
-              confirmButtonText: action === 'accept' ? "Ya, Terima" : "Ya, Tolak"
-            }).then((result) => {
-              if (result.isConfirmed) {
-                $.ajax({
-                  url: "update_ib.php",
-                  method: "GET",
-                  dataType: "json",
-                  data: {
-                    id: id,
-                    action: action
-                  },
-                  success: function(response) {
-                    Swal.fire({
-                      title: response.success ? "Berhasil!" : "Gagal!",
-                      text: response.message,
-                      icon: response.success ? "success" : "error",
-                      timer: 2000,
-                      showConfirmButton: false
-                    });
-
-                    // Reload data setelah update
-                    if (response.success) {
-                      setTimeout(() => {
-                        loadData();
-                      }, 2000);
-                    }
-                  },
-                  error: function() {
-                    Swal.fire("Error!", "Terjadi kesalahan saat memproses data.", "error");
-                  }
+    function konfirmasiAction(action, id) {
+      Swal.fire({
+        title: action === 'accept' ? "Terima Booking?" : "Tolak Booking?",
+        text: action === 'accept' ? "Booking ini akan dipindahkan ke history." : "Booking ini akan dihapus.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: action === 'accept' ? "#28a745" : "#d33",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: action === 'accept' ? "Ya, Terima" : "Ya, Tolak"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "fetch_booking.php",
+            method: "POST",
+            data: {
+              id_booking: id,
+              action: action
+            },
+            success: function(response) {
+              if (response.trim() === 'success') {
+                Swal.fire({
+                  title: "Berhasil!",
+                  text: action === 'accept' ? "Booking berhasil dipindahkan ke history." : "Booking berhasil ditolak.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false
                 });
+                setTimeout(() => { loadData(); }, 1500);
+              } else {
+                Swal.fire("Gagal!", "Terjadi kesalahan saat memproses data.", "error");
               }
-            });
-          }
-
-          // Event listener tombol accept & reject
-          $(document).on("click", ".btn-accept", function() {
-            var id = $(this).data("id");
-            konfirmasiAction("accept", id);
+            },
+            error: function() {
+              Swal.fire("Error!", "Terjadi kesalahan koneksi.", "error");
+            }
           });
+        }
+      });
+    }
 
-          $(document).on("click", ".btn-reject", function() {
-            var id = $(this).data("id");
-            konfirmasiAction("reject", id);
-          });
-        });
-      </script>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    $(document).on("click", ".btn-accept", function() {
+      const id = $(this).data("id");
+      konfirmasiAction("accept", id);
+    });
+
+    $(document).on("click", ".btn-reject", function() {
+      const id = $(this).data("id");
+      konfirmasiAction("reject", id);
+    });
+  });
+</script>
 
       <footer class="footer">
         <div class="container-fluid d-flex justify-content-between">

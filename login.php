@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <h2>Login</h2>
         <form method="POST">
-            <input type="text" name="nama" placeholder="Masukkan Nama" required>
+            <input type="text" name="nama" placeholder="Masukkan Username" required>
             <input type="password" name="password" placeholder="Masukkan Password" required>
             <button type="submit">Login</button>
         </form>

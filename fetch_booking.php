@@ -1,10 +1,46 @@
 <?php
 include 'koneksi.php';
 
-// Query hanya menampilkan booking yang belum dibatalkan
+// ✅ Handle Accept Request
+if (isset($_POST['action']) && $_POST['action'] == 'accept') {
+    $id_booking = $_POST['id_booking'];
+
+    // Ambil data booking dari informasi_booking
+    $result = $conn->query("SELECT * FROM informasi_booking WHERE id_booking = $id_booking");
+    $data = $result->fetch_assoc();
+
+    if ($data) {
+        // Pindahkan data ke history_sewa_lapangan
+        $insert = $conn->query("INSERT INTO history_sewa_lapangan (id_user, nama_user, jadwal_booking, bukti_transfer, created_at, via_pembayaran, nomor_pembayaran, jam)
+            VALUES ('{$data['id_user']}', '{$data['nama_user']}', '{$data['jadwal_booking']}', '{$data['bukti_transfer']}', '{$data['created_at']}', '{$data['via_pembayaran']}', '{$data['nomor_pembayaran']}', '{$data['jam']}')");
+
+        if ($insert) {
+            // Hapus dari tabel informasi_booking
+            $conn->query("DELETE FROM informasi_booking WHERE id_booking = $id_booking");
+            echo 'success';
+        } else {
+            echo 'insert_failed';
+        }
+    } else {
+        echo 'not_found';
+    }
+    exit;
+}
+
+// ✅ Handle Reject Request
+if (isset($_POST['action']) && $_POST['action'] == 'reject') {
+    $id_booking = $_POST['id_booking'];
+    if ($conn->query("DELETE FROM informasi_booking WHERE id_booking = $id_booking")) {
+        echo 'success';
+    } else {
+        echo 'delete_failed';
+    }
+    exit;
+}
+
+// ✅ Tampilkan data booking seperti sebelumnya
 $query = "SELECT * FROM informasi_booking WHERE status NOT IN ('dibatalkan')";
 
-// Jika ada pencarian, gunakan prepared statement untuk keamanan
 if (!empty($_POST["query"])) {
     $search = "%" . $_POST["query"] . "%";
     $query = "SELECT * FROM informasi_booking 
@@ -14,7 +50,6 @@ if (!empty($_POST["query"])) {
               AND status NOT IN ('dibatalkan')";
 }
 
-// Siapkan statement
 $stmt = $conn->prepare($query);
 
 if (!empty($_POST["query"])) {
@@ -27,15 +62,14 @@ $no = 1;
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        // Atur warna badge sesuai status
         if ($row['status'] == 'pending') {
-            $badgeColor = "#f39c12"; // Orange
+            $badgeColor = "#f39c12";
         } elseif ($row['status'] == 'selesai') {
-            $badgeColor = "#2ecc71"; // Hijau
+            $badgeColor = "#2ecc71";
         } elseif ($row['status'] == 'dibatalkan') {
-            $badgeColor = "#e74c3c"; // Merah
+            $badgeColor = "#e74c3c";
         } else {
-            $badgeColor = "#95a5a6"; // Abu-abu
+            $badgeColor = "#95a5a6";
         }
 
         echo "<tr style='border-bottom: 1px solid #ddd;'>
@@ -67,3 +101,4 @@ if ($result->num_rows > 0) {
 }
 
 $stmt->close();
+?>
